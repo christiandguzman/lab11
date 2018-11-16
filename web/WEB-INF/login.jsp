@@ -17,6 +17,9 @@
             username: <input type="text" required name="username"><br>
             password: <input type="password" required name="password"><br>
             <input type="submit" value="Submit">
+            
         </form>
+        
+        <a href="forgot?action">Forgot Password</a>
     </body>
 </html>

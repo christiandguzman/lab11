@@ -1,16 +1,12 @@
 package database;
 
 import models.User;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import javax.persistence.NoResultException;
 import models.Role;
 
 public class UserDB {
@@ -21,7 +17,7 @@ public class UserDB {
         try {
             Role role = em.find(Role.class, 2);  // 2 is for regular user
             user.setRole(role);
-            
+
             trans.begin();
             em.persist(user);
             trans.commit();
@@ -56,7 +52,7 @@ public class UserDB {
         EntityManager em = DBUtil.getEmFactory().createEntityManager();
         try {
             List<User> users = em.createNamedQuery("User.findAll", User.class).getResultList();
-            return users;                
+            return users;
         } finally {
             em.close();
         }
@@ -88,4 +84,17 @@ public class UserDB {
             em.close();
         }
     }
+
+    public User getUserByEmail(String email) {
+        EntityManager em = DBUtil.getEmFactory().createEntityManager();
+        try {
+            User user = em.createNamedQuery("User.findByEmail",User.class).setParameter("email", email).getSingleResult();
+            return user;
+        }catch (NoResultException ex){ 
+            return null;
+        }finally {
+            em.close();
+        }
+    }
+
 }
